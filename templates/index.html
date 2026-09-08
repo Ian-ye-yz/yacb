@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <title>YACB</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+    <main>
+        <section class="game">
+            <div class="header">
+                <div>
+                    <h1>YACB</h1>
+                    <p class="subtitle">Yet Another Chess Bot</p>
+                </div>
+
+                <div class="controls">
+                    <select id="color">
+                        <option value="white">Play White</option>
+                        <option value="black">Play Black</option>
+                    </select>
+
+                    <button id="new-game">
+                        New Game
+                    </button>
+                </div>
+            </div>
+
+            <div class="game-area">
+                <div id="board"></div>
+
+                <aside>
+                    <div class="panel">
+                        <div class="label">Status</div>
+                        <div id="status">Loading...</div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="label">Last move</div>
+                        <div id="last-move">—</div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="label">Bot move</div>
+                        <div id="bot-move">—</div>
+                    </div>
+
+                    <div
+                        id="error"
+                        class="error"
+                    ></div>
+                </aside>
+            </div>
+        </section>
+    </main>
+
+    <script
+        src="{{ url_for('static', filename='game.js') }}"
+    ></script>
+</body>
+</html>
