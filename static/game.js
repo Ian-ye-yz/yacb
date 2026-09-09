@@ -20,12 +20,12 @@ const newGameButton =
 
 
 const pieces = {
-    "K": "♔",
-    "Q": "♕",
-    "R": "♖",
-    "B": "♗",
-    "N": "♘",
-    "P": "♙",
+    "K": "♚",
+    "Q": "♛",
+    "R": "♜",
+    "B": "♝",
+    "N": "♞",
+    "P": "♟",
 
     "k": "♚",
     "q": "♛",
@@ -42,7 +42,6 @@ let selected = null;
 
 function fenToBoard(fen) {
     const placement = fen.split(" ")[0];
-
     const rows = placement.split("/");
 
     const board = {};
@@ -160,9 +159,18 @@ function renderBoard() {
                 const piece =
                     document.createElement("span");
 
+                const symbol = board[square];
+
                 piece.className = "piece";
+
+                piece.classList.add(
+                    symbol === symbol.toUpperCase()
+                        ? "white-piece"
+                        : "black-piece"
+                );
+
                 piece.textContent =
-                    pieces[board[square]];
+                    pieces[symbol];
 
                 squareElement.appendChild(piece);
             }
@@ -217,7 +225,6 @@ async function onSquareClick(square) {
     if (legalMoves.length > 0) {
         let move = legalMoves[0];
 
-        // Promotion.
         if (legalMoves.length > 1) {
             const promotion =
                 prompt(
@@ -241,7 +248,6 @@ async function onSquareClick(square) {
         return;
     }
 
-    // Allow switching to another selectable piece.
     if (legalTargets(square).length > 0) {
         selected = square;
     } else {
