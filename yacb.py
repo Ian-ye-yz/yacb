@@ -110,6 +110,29 @@ class YACB:
                 rk, fl = chess.square_rank(i), chess.square_file(i)
                 evaluation -= self.opponentPositionalValue[typ][rk][fl] + val
             # evaluation -= len(board.pieces(typ, not self.color)) * val
+        direction = 1 if self.color == chess.WHITE else -1
+        for i in board.pieces(chess.ROOK, self.color):
+            rk, fl = chess.square_rank(i), chess.square_file(i)
+            blocked = False
+            while 0 <= rk < 8:
+                piece = board.piece_at(chess.square(fl, rk))
+                if piece != None:
+                    if piece.piece_type == chess.PAWN and piece.color != self.color:
+                        blocked = True
+                rk += direction
+            if blocked:
+                evaluation -= 20
+        for i in board.pieces(chess.ROOK, not self.color):
+            rk, fl = chess.square_rank(i), chess.square_file(i)
+            blocked = False
+            while 0 <= rk < 8:
+                piece = board.piece_at(chess.square(fl, rk))
+                if piece != None:
+                    if piece.piece_type == chess.PAWN and piece.color == self.color:
+                        blocked = True
+                rk -= direction
+            if blocked:
+                evaluation += 20
         return evaluation
     def minimax(self, board: chess.Board, depth):
         if depth == 0 or board.is_game_over():
