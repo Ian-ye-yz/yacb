@@ -4,10 +4,10 @@ class YACB:
     def __init__(self, color = chess.WHITE, board = chess.Board()):
         self.board = board
         self.values = {
-            chess.PAWN: 1,
+            chess.PAWN: 2,
             chess.KNIGHT: 3.2,
             chess.BISHOP: 3.3,
-            chess.ROOK: 4,
+            chess.ROOK: 4.5,
             chess.QUEEN: 9,
             chess.KING: 1
         }
@@ -15,7 +15,7 @@ class YACB:
             chess.PAWN:  [
                 [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00],  # rank 1
                 [1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00],  # rank 2
-                [1.05, 1.05, 1.08, 1.10, 1.10, 1.08, 1.05, 1.05],  # rank 3
+                [1.03, 1.04, 1.08, 1.10, 1.10, 1.08, 1.04, 1.03],  # rank 3
                 [1.10, 1.12, 1.15, 1.18, 1.18, 1.15, 1.12, 1.10],  # rank 4
                 [1.18, 1.20, 1.25, 1.28, 1.28, 1.25, 1.20, 1.18],  # rank 5
                 [1.35, 1.40, 1.45, 1.50, 1.50, 1.45, 1.40, 1.35],  # rank 6
@@ -81,13 +81,17 @@ class YACB:
             self.positionalValue[chess.PAWN].reverse()
             self.positionalValue[chess.ROOK].reverse()
             self.positionalValue[chess.KING].reverse()
-        self.opponentPositionalValue = {}
-        for typ, val in self.positionalValue.items():
-            self.opponentPositionalValue[typ] = val
-            self.opponentPositionalValue[typ].reverse()
+        self.opponentPositionalValue = {
+            typ: table[::-1]
+            for typ, table in self.positionalValue.items()
+        }
     def evaluate(self, board: chess.Board):
-        if board.is_game_over():
-            return float("inf")
+        if board.is_checkmate():
+            if board.turn == self.color:
+                # My turn, but I have no legal move => I got mated
+                return -10000
+            else:
+                return 10000
         evaluation = 0
         for typ, val in self.values.items():
             for i in board.pieces(typ, self.color):
